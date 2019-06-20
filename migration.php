@@ -59,15 +59,16 @@ function takePostContent($post_id) {
         'sort_order' => 'asc'
     ) );
 
-    $returnData = json_encode($post_list);
+    $page_list = get_pages( array(
+        'orderby'    => 'menu_order',
+        'sort_order' => 'asc'
+    ) );
 
-    // $content = get_post($post_id);
-    // $post_content = $content->post_content;
-    // $content = apply_filters('the_content', $content);
-    // $content = str_replace(']]>', ']]&gt;', $content);
+    $returnData = json_encode(array_merge($post_list, $page_list));
+    
     $my_file = 'testing.txt';
     $handle = fopen($my_file, 'w') or die('Cannot open file: ' .$my_file);
-    file_put_contents($my_file, $returnData);
+    file_put_contents('testing.txt', $returnData);
 }
 
 add_action( 'plugins_loaded', 'takePostContent', 10, 1 );

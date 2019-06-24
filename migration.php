@@ -52,30 +52,27 @@ if (class_exists('migrationTest')) {
 }
 
 function takePostContent($post_id) {
-
-
     $post_list = get_posts( array(
         'orderby'    => 'menu_order',
         'sort_order' => 'asc'
     ) );
 
     $page_list = get_pages( array(
-        'orderby'    => 'menu_order',
-        'sort_order' => 'asc'
+        'sort_order' => 'desc'
     ) );
 
     $returnData = json_encode(array_merge($post_list, $page_list));
+
     
     $my_file = 'testing.txt';
     $handle = fopen($my_file, 'w') or die('Cannot open file: ' .$my_file);
     file_put_contents('testing.txt', $returnData);
 }
 
-add_action( 'plugins_loaded', 'takePostContent', 10, 1 );
-
+register_activation_hook( __FILE__, 'takePostContent' );
 
 // activation
-register_activation_hook(__FILE__, array($pluginObj, 'activate'));// this array will access the funciton in the class
+register_activation_hook(__FILE__, array($pluginObj, 'activate'));
 
 // deactivation
 register_deactivation_hook(__FILE__, array($pluginObj, 'deactivate'));
